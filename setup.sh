@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# 🚀 VideoGrabber 2.0 - Setup Script (Arquitectura Optimizada)
-echo "🎥 Configurando VideoGrabber 2.0 con arquitectura modular..."
+# 🚀 VideoGrabber 1.0 - Setup Script (Arquitectura Optimizada)
+echo "🎥 Configurando VideoGrabber 1.0 con arquitectura modular..."
 
 # Verificar dependencias del sistema
 echo "📋 Verificando dependencias del sistema..."

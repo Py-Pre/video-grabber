@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# 🚀 VideoGrabber 2.0 - Script de Inicio Rápido
-echo "🎥 Iniciando VideoGrabber 2.0..."
+# 🚀 VideoGrabber 1.0 - Script de Inicio Rápido
+echo "🎥 Iniciando VideoGrabber 1.0..."
 
 # Verificar si el entorno virtual existe
 if [ ! -d "venv" ]; then

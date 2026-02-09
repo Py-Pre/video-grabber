@@ -1,5 +1,5 @@
 """
-VideoGrabber 2.0 - Modern Video/Audio Downloader
+VideoGrabber 1.0 - Modern Video/Audio Downloader
 Optimized architecture inspired by Seal
 """
 
@@ -68,7 +68,7 @@ class VideoInfo(BaseModel):
 # FastAPI app configuration
 app = FastAPI(
     title="VideoGrabber API", 
-    version="2.0.0",
+    version="1.0.0",
     description="API moderna y optimizada para descargar videos y audio"
 )
 
@@ -91,7 +91,7 @@ async def serve_app():
     """Serve the React application"""
     if os.path.exists("dist/index.html"):
         return FileResponse("dist/index.html")
-    return {"message": "VideoGrabber 2.0 API", "docs": "/docs"}
+    return {"message": "VideoGrabber 1.0 API", "docs": "/docs"}
 
 
 @app.post("/api/info")
@@ -220,5 +220,5 @@ async def cancel_download(session_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    logger.info("🚀 Starting VideoGrabber 2.0 with optimized architecture")
+    logger.info("🚀 Starting VideoGrabber 1.0 with optimized architecture")
     uvicorn.run(app, host="0.0.0.0", port=8000)
