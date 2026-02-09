@@ -1,6 +1,21 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#4FC3F7"/>
-  <path d="M16 6L22 12H18V20H14V12H10L16 6Z" fill="white"/>
-  <rect x="8" y="22" width="16" height="2" rx="1" fill="white"/>
-  <rect x="10" y="25" width="12" height="1" rx="0.5" fill="white" fill-opacity="0.7"/>
+  <!-- Fondo con gradiente -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#03A9F4"/>
+      <stop offset="50%" stop-color="#4FC3F7"/>
+      <stop offset="100%" stop-color="#81C784"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="32" height="32" rx="8" fill="url(#bgGradient)"/>
+  
+  <!-- Nube -->
+  <path d="M24 14.5C24 12.567 22.433 11 20.5 11C20.258 11 20.022 11.024 19.795 11.07C19.115 9.279 17.334 8 15.25 8C12.35 8 10 10.35 10 13.25C10 13.44 10.013 13.627 10.038 13.811C8.844 14.21 8 15.352 8 16.7C8 18.473 9.527 20 11.3 20H22.7C24.473 20 26 18.473 26 16.7C26 15.407 25.232 14.303 24 14.5Z" fill="white" fill-opacity="0.9"/>
+  
+  <!-- Flecha de descarga -->
+  <path d="M16 12L16 18M16 18L13 15M16 18L19 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Base de descarga -->
+  <rect x="11" y="22" width="10" height="1.5" rx="0.75" fill="white" fill-opacity="0.8"/>
 </svg>
