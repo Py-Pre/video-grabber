@@ -1,0 +1,39 @@
+# Node
+node_modules/
+npm-debug.log
+dist/
+.vite/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+.venv/
+venv/
+ENV/
+
+# Development
+.git/
+.gitignore
+.env.local
+.DS_Store
+*.log
+
+# Downloads (se montan como volumen)
+downloads/*
+!downloads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docs
+README.md
+*.md

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  videograbber:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: videograbber-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persistir descargas
+      - ./downloads:/app/downloads
+      # Persistir thumbnails
+      - ./public/thumbnails:/app/public/thumbnails
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WORKERS=2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - videograbber-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 512M
+
+networks:
+  videograbber-network:
+    driver: bridge
