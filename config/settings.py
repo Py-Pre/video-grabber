@@ -114,14 +114,12 @@ def get_ydl_base_options() -> Dict[str, Any]:
         # Retraso entre solicitudes para evitar rate limiting
         'sleep_interval': DOWNLOAD_CONFIG['sleep_interval'],
         'max_sleep_interval': 3,
-        # Configuración de extractor de YouTube para evitar bot detection
-        # Técnica usada por metube, tubearchivist y similares:
-        # - mweb: cliente móvil web, menos restrictivo
-        # - ios: cliente iOS, bypass token validation en muchos casos
-        # - NO usar player_skip js porque rompe la extracción de formatos
+        # Configuración de extractor de YouTube
+        # android_vr y tv_embedded tienen menos restricciones anti-bot en 2025/2026
+        # No usar mweb — causa "Failed to extract any player response"
         'extractor_args': {
             'youtube': {
-                'player_client': ['mweb', 'ios'],
+                'player_client': ['android', 'tv_embedded'],
             }
         },
     }

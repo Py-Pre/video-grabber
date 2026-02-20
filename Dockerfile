@@ -49,15 +49,19 @@ COPY cookies.txt ./cookies.txt
 COPY --from=frontend-builder /app/dist ./dist
 COPY --from=frontend-builder /app/public/icon.svg ./dist/icon.svg
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh
+
 # Create downloads directory
 RUN mkdir -p downloads public/thumbnails/search
 
 # Expose port
 EXPOSE 8000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8000/ || exit 1
+# Health check — dar 60s de margen para que yt-dlp se actualice al arrancar
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8000/api/health || exit 1
 
-# Run application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+# Run application via entrypoint (actualiza yt-dlp en cada inicio)
+CMD ["/app/docker-entrypoint.sh"]
