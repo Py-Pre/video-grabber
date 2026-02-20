@@ -75,7 +75,9 @@ def _get_po_token_args() -> Dict[str, Any]:
     Solución permanente para VPS sin necesidad de cookies manuales.
     Si el servidor no está disponible, usa cliente 'ios' como fallback.
     """
-    po_token_url = os.getenv('PO_TOKEN_SERVER', 'http://localhost:10000/token')
+    # Dentro del container Docker, 127.0.0.1 es siempre el propio container
+    # (funciona igual en local y en VPS ya que Deno y uvicorn comparten el mismo container)
+    po_token_url = os.getenv('PO_TOKEN_SERVER', 'http://127.0.0.1:10000/token')
     try:
         import urllib.request
         import json as _json

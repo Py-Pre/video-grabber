@@ -33,7 +33,7 @@ async function generateToken() {
   return cachedToken;
 }
 
-Deno.serve({ port: PORT }, async (req) => {
+Deno.serve({ port: PORT, hostname: "0.0.0.0" }, async (req) => {
   const url = new URL(req.url);
 
   if (url.pathname === "/token") {
