@@ -114,12 +114,11 @@ def get_ydl_base_options() -> Dict[str, Any]:
         # Retraso entre solicitudes para evitar rate limiting
         'sleep_interval': DOWNLOAD_CONFIG['sleep_interval'],
         'max_sleep_interval': 3,
-        # Configuración de extractor de YouTube
-        # android_vr y tv_embedded tienen menos restricciones anti-bot en 2025/2026
-        # No usar mweb — causa "Failed to extract any player response"
+        # player_client: 'web' con cookies válidas es el más estable en 2025/2026
+        # 'ios' como fallback — no requiere PO token a diferencia de android/tv_embedded
         'extractor_args': {
             'youtube': {
-                'player_client': ['android', 'tv_embedded'],
+                'player_client': ['web', 'ios'],
             }
         },
     }

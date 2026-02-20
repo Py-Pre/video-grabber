@@ -162,9 +162,12 @@ async def download_video(url: str, format_id: str, format_type: str = "video"):
         if not is_valid:
             raise HTTPException(status_code=400, detail=error_msg)
         
-        # Get title for filename
+        # Get title for filename — usar las mismas opciones base (cookies, headers, etc.)
         import yt_dlp
-        with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
+        from config.settings import get_ydl_base_options
+        ydl_info_opts = get_ydl_base_options()
+        ydl_info_opts.update({'skip_download': True, 'quiet': True})
+        with yt_dlp.YoutubeDL(ydl_info_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             title = info.get('title', 'download')
         
