@@ -92,8 +92,10 @@ class VideoProcessor:
             elif "Unsupported URL" in error_msg:
                 raise Exception("Esta plataforma no está soportada o el enlace no es válido.")
             elif "network" in error_msg.lower() or "timeout" in error_msg.lower():
-                raise Exception("Error de conexión. Verifica tu internet e intenta de nuevo.")            elif "Sign in to confirm" in error_msg or "bot" in error_msg.lower():
-                raise Exception("YouTube requiere verificación anti-bot. Intenta con otro video o usa un enlace diferente.")            else:
+                raise Exception("Error de conexión. Verifica tu internet e intenta de nuevo.")
+            elif "Sign in to confirm" in error_msg or "bot" in error_msg.lower():
+                raise Exception("YouTube requiere verificación anti-bot. Intenta con otro video o usa un enlace diferente.")
+            else:
                 raise Exception(f"Error al procesar el video: {error_msg}")
         except Exception as e:
             logger.error(f"Video info extraction failed: {str(e)}")

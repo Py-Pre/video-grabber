@@ -15,6 +15,7 @@ DOWNLOAD_CONFIG = {
     'info_timeout': 15,  # Timeout específico para extracción de info
     'fragment_retries': 2,  # Reintentos de fragmentos
     'skip_unavailable_fragments': True,  # Saltar fragmentos no disponibles
+    'sleep_interval': 1,  # Retraso de 1 segundo entre solicitudes para evitar rate limiting
 }
 
 # Video Quality Configuration  
@@ -107,6 +108,14 @@ def get_ydl_base_options() -> Dict[str, Any]:
             'Cache-Control': 'max-age=0',
         },
         'cookiefile': os.getenv('COOKIE_FILE', None),  # Archivo de cookies opcional
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['ios', 'web'],  # Usar clientes alternativos para evitar bloqueos
+                'player_skip': ['js', 'configs'],  # Saltar elementos que activan detección
+            }
+        },
+        'sleep_interval': DOWNLOAD_CONFIG['sleep_interval'],
+        'proxy': os.getenv('PROXY_URL', None),  # Proxy opcional
     }
 
 def get_video_options(format_id: str) -> Dict[str, Any]:
