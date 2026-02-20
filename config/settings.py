@@ -91,8 +91,8 @@ def get_ydl_base_options() -> Dict[str, Any]:
         'playlistend': 1,  # Solo el video actual
         'max_downloads': 1,
         'no_color': True,
-        'prefer_free_formats': False,  # Priorizar formatos de buena calidad
-        # Headers para evitar detección de bots
+        'prefer_free_formats': False,
+        # Headers para evitar detección de bots (patrón usado por metube/tubearchivist)
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -107,15 +107,23 @@ def get_ydl_base_options() -> Dict[str, Any]:
             'Sec-Fetch-User': '?1',
             'Cache-Control': 'max-age=0',
         },
-        'cookiefile': os.getenv('COOKIE_FILE', None),  # Archivo de cookies opcional
+        # Cookies del navegador para autenticación con YouTube (esencial en producción)
+        'cookiefile': os.getenv('COOKIE_FILE', None) or None,
+        # Proxy opcional (util si Cloudflare o YouTube bloquea la IP del VPS)
+        'proxy': os.getenv('PROXY_URL', None) or None,
+        # Retraso entre solicitudes para evitar rate limiting
+        'sleep_interval': DOWNLOAD_CONFIG['sleep_interval'],
+        'max_sleep_interval': 3,
+        # Configuración de extractor de YouTube para evitar bot detection
+        # Técnica usada por metube, tubearchivist y similares:
+        # - mweb: cliente móvil web, menos restrictivo
+        # - ios: cliente iOS, bypass token validation en muchos casos
+        # - NO usar player_skip js porque rompe la extracción de formatos
         'extractor_args': {
             'youtube': {
-                'player_client': ['ios', 'web'],  # Usar clientes alternativos para evitar bloqueos
-                'player_skip': ['js', 'configs'],  # Saltar elementos que activan detección
+                'player_client': ['mweb', 'ios'],
             }
         },
-        'sleep_interval': DOWNLOAD_CONFIG['sleep_interval'],
-        'proxy': os.getenv('PROXY_URL', None),  # Proxy opcional
     }
 
 def get_video_options(format_id: str) -> Dict[str, Any]:

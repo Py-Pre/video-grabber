@@ -72,19 +72,21 @@ app = FastAPI(
     description="API moderna y optimizada para descargar videos y audio"
 )
 
-# CORS middleware
+# CORS middleware — lee los orígenes desde variable de entorno en producción
+_raw_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8000")
+ALLOWED_ORIGINS = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:8000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount React build
+# Mount only /assets — montar "/" como StaticFiles bloquea los POST a /api/*
 if os.path.exists("dist"):
     app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
-    app.mount("/", StaticFiles(directory="dist", html=True), name="static")
 
 
 @app.get("/")
@@ -93,6 +95,18 @@ async def serve_app():
     if os.path.exists("dist/index.html"):
         return FileResponse("dist/index.html")
     return {"message": "VideoGrabber 1.0 API", "docs": "/docs"}
+
+
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    """Catch-all: sirve index.html para rutas del SPA (React Router)"""
+    # No interceptar rutas de la API
+    if full_path.startswith("api/") or full_path.startswith("assets/"):
+        raise HTTPException(status_code=404, detail="Not found")
+    index_path = "dist/index.html"
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    raise HTTPException(status_code=404, detail="Frontend not built")
 
 
 @app.post("/api/info")
