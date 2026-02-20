@@ -36,7 +36,7 @@ WORKDIR /app
 
 # Copy Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install --upgrade yt-dlp
 
 # Copy backend code
 COPY main.py .
@@ -46,6 +46,7 @@ COPY utils/ ./utils/
 
 # Copy built frontend from builder stage
 COPY --from=frontend-builder /app/dist ./dist
+COPY --from=frontend-builder /app/public/icon.svg ./dist/icon.svg
 
 # Create downloads directory
 RUN mkdir -p downloads public/thumbnails/search

@@ -84,6 +84,7 @@ app.add_middleware(
 # Mount React build
 if os.path.exists("dist"):
     app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
+    app.mount("/", StaticFiles(directory="dist", html=True), name="static")
 
 
 @app.get("/")
