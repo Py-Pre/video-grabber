@@ -92,3 +92,6 @@ Thumbs.db
 *.bak
 *.backup
 *~.nib
+
+# Cookies (no subir al repo - usar PO Token server en su lugar)
+cookies.txt
