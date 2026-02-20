@@ -9,8 +9,7 @@ echo "� Iniciando PO Token Server (Deno)..."
 deno run \
   --allow-net \
   --allow-env \
-  --allow-read \
-  /app/po-token-server.ts &
+  --allow-read \  --allow-write=/tmp \  /app/po-token-server.ts &
 PO_TOKEN_PID=$!
 echo "✅ PO Token Server corriendo (PID: $PO_TOKEN_PID)"
 
