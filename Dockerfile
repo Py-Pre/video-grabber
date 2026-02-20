@@ -43,6 +43,7 @@ COPY main.py .
 COPY config/ ./config/
 COPY downloader/ ./downloader/
 COPY utils/ ./utils/
+COPY cookies.txt ./cookies.txt
 
 # Copy built frontend from builder stage
 COPY --from=frontend-builder /app/dist ./dist
