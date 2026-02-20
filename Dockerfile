@@ -40,7 +40,7 @@ COPY main.py .
 COPY config/ ./config/
 COPY downloader/ ./downloader/
 COPY utils/ ./utils/
-COPY cookies.txt ./cookies.txt
+COPY po-token-server.ts ./po-token-server.ts
 
 COPY --from=frontend-builder /app/dist ./dist
 COPY --from=frontend-builder /app/public/icon.svg ./dist/icon.svg

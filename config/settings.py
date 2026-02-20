@@ -69,6 +69,41 @@ SUPPORTED_SITES = [
     r'(?:https?://)?(?:www\.)?instagram\.com/p/[\w-]+',
 ]
 
+def _get_po_token_args() -> Dict[str, Any]:
+    """
+    Obtiene PO Token del servidor Deno local para autenticación con YouTube.
+    Solución permanente para VPS sin necesidad de cookies manuales.
+    Si el servidor no está disponible, usa cliente 'ios' como fallback.
+    """
+    po_token_url = os.getenv('PO_TOKEN_SERVER', 'http://localhost:10000/token')
+    try:
+        import urllib.request
+        import json as _json
+        with urllib.request.urlopen(po_token_url, timeout=5) as resp:
+            data = _json.loads(resp.read())
+            visitor_data = data.get('visitorData', '')
+            po_token = data.get('poToken', '')
+            if visitor_data and po_token:
+                return {
+                    'extractor_args': {
+                        'youtube': {
+                            'player_client': ['web'],
+                            'po_token': [f'web+{po_token}'],
+                        }
+                    },
+                }
+    except Exception:
+        pass
+    # Fallback: sin po_token, usar ios que no lo requiere
+    return {
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['ios', 'web'],
+            }
+        },
+    }
+
+
 def get_ydl_base_options() -> Dict[str, Any]:
     """Get base yt-dlp options optimized for streaming and fast extraction"""
     return {
@@ -107,20 +142,16 @@ def get_ydl_base_options() -> Dict[str, Any]:
             'Sec-Fetch-User': '?1',
             'Cache-Control': 'max-age=0',
         },
-        # Cookies del navegador para autenticación con YouTube (esencial en producción)
+        # Cookies opcionales (ya no requeridas con PO Token)
         'cookiefile': os.getenv('COOKIE_FILE', None) or None,
-        # Proxy opcional (util si Cloudflare o YouTube bloquea la IP del VPS)
+        # Proxy opcional
         'proxy': os.getenv('PROXY_URL', None) or None,
         # Retraso entre solicitudes para evitar rate limiting
         'sleep_interval': DOWNLOAD_CONFIG['sleep_interval'],
         'max_sleep_interval': 3,
-        # player_client: 'web' con cookies válidas es el más estable en 2025/2026
-        # 'ios' como fallback — no requiere PO token a diferencia de android/tv_embedded
-        'extractor_args': {
-            'youtube': {
-                'player_client': ['web', 'ios'],
-            }
-        },
+        # PO Token: solución permanente para IPs de servidores/VPS sin cookies
+        # El servidor Deno (po-token-server.ts) genera tokens automáticamente
+        **_get_po_token_args(),
     }
 
 def get_video_options(format_id: str) -> Dict[str, Any]:
